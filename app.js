@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var API_V1 = require('./routes/API_V1');
+//var docs = require('./routes/docs');
 
 var app = express();
 
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'docs')));
+//app.use(express.static(path.join(__dirname, 'docs')));
 
 // CORS so other teams can ping us
 // http://enable-cors.org/server_expressjs.html
@@ -33,7 +34,12 @@ app.use((req, res, next) => {
 });
 
 app.use('/', index);
+//app.use('/docs/build', index);
 app.use('/api/v1', API_V1);
+
+app.get('/docs/build',function(req,res){
+  res.sendFile(path.join(__dirname+'/docs/build/index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
