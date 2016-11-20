@@ -15,6 +15,8 @@ const LOGIN_HEADERS = {'Content-Type': 'application/x-www-form-urlencoded'};
 
 const sessionCache = {session: null};
 
+const _getQuery = query => query.split(' ').join(' AND ');
+
 const getResults = json => json.results.map(r => {
   const newResult = Object.assign({}, r, {source: SOURCE});
   if (newResult.hasOwnProperty('json')) {
@@ -47,7 +49,10 @@ const people = query => {
     return login().then(() => people(query));
   }
   const options = getSearchOptions(sessionCache.session);
-  return fetch(`${SEARCH_BASE}&q=${query}&${PEOPLE_QUERYSTRING}`, options)
+  return fetch(
+    `${SEARCH_BASE}&q=${_getQuery(query)}&${PEOPLE_QUERYSTRING}`,
+    options
+  )
     .then(res => {
       if (res.status === 403) {
         sessionCache.session = null;
@@ -63,7 +68,7 @@ const search = query => {
     return login().then(() => people(query));
   }
   const options = getSearchOptions(sessionCache.session);
-  return fetch(`${SEARCH_BASE}&q=${query}`, options)
+  return fetch(`${SEARCH_BASE}&q=${_getQuery(query)}`, options)
     .then(res => {
       if (res.status === 403) {
         sessionCache.session = null;
