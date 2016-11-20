@@ -83,6 +83,39 @@ const mapExhibition = (json) => {
   return exhibition;
 };
 
+const mapDepartment = (json) => {
+  // const exhibition = { id: _.at(json, 'eac-cpf.control.recordId')[0] };
+  // const biogHist = _.at(json, 'eac-cpf.cpfDescription.description.biogHist')[0];
+  // const abstract = _.at(json, 'eac-cpf.cpfDescription.description.biogHist.abstract')[0];
+  // const fromDate = _.at(json, 'eac-cpf.cpfDescription.description.existDates.dateRange.fromDate.standardDate')[0];
+  // const toDate = _.at(json, 'eac-cpf.cpfDescription.description.existDates.dateRange.toDate.standardDate')[0];
+  // const place = _.at(json, 'eac-cpf.cpfDescription.description.place.descriptiveNote')[0];
+  // const names = _.at(json, 'eac-cpf.cpfDescription.identity.nameEntry')[0];
+  //
+  // if (typeof biogHist !== 'undefined') {
+  //   exhibition.description = biogHist.p ? biogHist.p : biogHist;
+  // }
+  // if (typeof abstract !== 'undefined') {
+  //   exhibition.abstract = abstract;
+  // }
+  // if (typeof fromDate === 'string' && typeof toDate === 'string') {
+  //   exhibition['existDates'] = {
+  //     start: moment(fromDate, 'YYYY-MM-DD').valueOf(),
+  //     end: moment(toDate, 'YYYY-MM-DD').valueOf()
+  //   };
+  // }
+  // if (typeof place !== 'undefined') {
+  //   exhibition.place = place.p ? place.p : place;
+  // }
+  // if (Array.isArray(names) && names.length > 0) {
+  //   exhibition.names = names.map(name => ({
+  //     name: _.at(name, 'part[1].$t')[0] || _.at(name, 'part')[0],
+  //     dates: _.at(name, 'useDates.dateSet.date')[0] || _.at(name, 'useDates.date')[0]
+  //   }));
+  // }
+  return json;
+};
+
 const fetchXEAC = (id) => {
   return fetch(`http://data.library.amnh.org:8082/exist/rest/db/xeac/records/${id}.xml`)
     .then(response => response.text())
@@ -93,3 +126,4 @@ const fetchXEAC = (id) => {
 exports.getPerson = (id) => fetchXEAC(id).then(mapPerson);
 exports.getExpedition = (id) => fetchXEAC(id).then(mapExpedition);
 exports.getExhibition = (id) => fetchXEAC(id).then(mapExhibition);
+exports.getDepartment = (id) => fetchXEAC(id).then(mapDepartment);
