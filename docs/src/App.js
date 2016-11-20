@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import AppBar from 'material-ui/AppBar';
+
+import List from './components/List';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <div>
+        <AppBar title="AMNH API Portal"/>
+        <div style={{
+          width: '60em',
+          margin: '2em auto'
+        }}>
+          <List entities={this.props.params.entities} />
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
       </div>
     );
   }
