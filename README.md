@@ -1,6 +1,8 @@
 # API Portal
 
 To start the server: **npm start**
+*OR*
+**pm2 start npm --name "HackathonAPI" -- start --watch**
 
 Make a GET request to any of the end points.
 [Postman](https://www.getpostman.com/) works well for testing.
