@@ -2,9 +2,19 @@ var _ = require('lodash');
 
 const BASE = 'http://10.20.40.218:9200';
 
-const getBody = (query, size) => (
-  JSON.stringify({query: {match: {'_all': query}}, size: size})
-);
+const _getBody = (query, size) => {
+  return JSON.stringify({
+    query: {
+      query_string: {
+        query: query
+      }
+    }
+  });
+};
+
+const getBody = (query, size) => {
+  return _getBody(query.split(' ').join(' AND '), size);
+};
 
 const getOptions = (query, size) => ({
   method: 'POST',
