@@ -66,7 +66,10 @@ router.get('/people/:id', (req, res, next) => {
         .getPeople()
         .then(people => people.filter(filterQueryParams({ id: req.params.id })))
         .then(people => people[0])
-        .then(person => person.name)
+        .then(person => {
+          finalPerson = person;
+          return person.name;
+        })
     })
     .then(fullName => search(fullName))
     .then(results => res.json(
@@ -82,14 +85,22 @@ router.get('/expeditions', (req, res, next) => {
 });
 
 router.get('/expeditions/:id', (req, res, next) => {
-  let expedition = null;
+  let finalExpedition = null;
   xeac
     .getExpedition(req.params.id)
-    .then(e => {
-      expedition = e;
-      return search(expedition.name);
-    }).then(results => res.json(
-      formatSearchResponse('expedition', expedition, results)
+    .then(expedition => {
+      if (typeof expedition.name !== 'undefined') {
+        return expedition;
+      }
+      return csv
+        .getExpeditions()
+        .then(expeditions => expeditions.filter(filterQueryParams({ id: req.params.id })))
+        .then(expeditions => expeditions[0])
+    })
+    .then(expedition => finalExpedition = expedition)
+    .then(expedition => search(expedition.name))
+    .then(results => res.json(
+      formatSearchResponse('expedition', finalExpedition, results)
     ));
 });
 
@@ -110,10 +121,7 @@ router.get('/exhibitions/:id', (req, res, next) => {
       if (!exhibition.permanent) return exhibition;
       return xeac.getExhibition(exhibition.id);
     })
-    .then(exhibition => {
-      finalExhibition = exhibition;
-      return exhibition;
-    })
+    .then(exhibition => finalExhibition = exhibition)
     .then(exhibition => search(exhibition.name))
     .then(results => res.json(
       formatSearchResponse('exhibition', finalExhibition, results)
@@ -128,14 +136,22 @@ router.get('/departments', (req, res, next) => {
 });
 
 router.get('/departments/:id', (req, res, next) => {
-  let department;
+  let finalDepartment = null;
   xeac
     .getDepartment(req.params.id)
-    .then(d => {
-      department = d;
-      return search(department.name);
-    }).then(results => res.json(
-      formatSearchResponse('department', department, results)
+    .then(department => {
+      if (typeof department.name !== 'undefined') {
+        return department;
+      }
+      return csv
+        .getDepartments()
+        .then(departments => departments.filter(filterQueryParams({ id: req.params.id })))
+        .then(departments => departments[0])
+    })
+    .then(department => finalDepartment = department)
+    .then(department => search(department.name))
+    .then(results => res.json(
+      formatSearchResponse('department', finalDepartment, results)
     ));
 });
 
