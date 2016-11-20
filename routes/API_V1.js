@@ -43,6 +43,12 @@ router.get('/expeditions', (req, res, next) => {
     .then(expeditions => res.send(expeditions));
 });
 
+router.get('/expeditions/:id', (req, res, next) => {
+  xeac
+    .getExpedition(req.params.id)
+    .then(expedition => res.send(expedition));
+});
+
 router.get('/resources/archives-space', function (req, res, next) {
   aspace
     .search(req.query.q)
