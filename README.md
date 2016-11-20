@@ -1,4 +1,8 @@
 # API Portal
+You can find the API server at *http://10.20.40.218:3000*
+
+Make sure you're on the *Hack the Stacks* wifi
+
 ### /api/v1/people
 ```json
 [
