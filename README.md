@@ -10,6 +10,23 @@ You must be on the *HackTheStacks* network to connect to the URL.
 
 Substitute `<ROUTE>` with one of the routes listed below.
 
+### /api/v1/search?q=<QUERY>
+```json
+[
+  {
+    "id": "/agents/corporate_entities/132",
+    "title": "Central Asiatic Expeditions (1921-1930)",
+    "primary_type": "agent_corporate_entity",
+    "types": [
+      "agent_corporate_entity",
+      "agent"
+    ]
+  }
+]
+```
+**Note**: The search endpoint results are largely unstructured.
+
+
 ### /api/v1/people
 ```json
 [

@@ -13,12 +13,14 @@ const _getBody = (query, size) => {
 };
 
 const getBody = (query, size) => {
-  return _getBody(query.split(' ').join(' AND '), size);
+    return query !== null && query !== undefined
+      ? _getBody(query.split(' ').join(' AND '), size)
+      : [];
 };
 
-const getOptions = (query, size) => ({
+const getOptions = (query, size, flexible) => ({
   method: 'POST',
-  body: getBody(query, size),
+  body: flexible ? _getBody(query, size) : getBody(query, size),
 });
 
 const getSearchURIs = paths => paths.map(p => `${BASE}/${p}/_search`);
