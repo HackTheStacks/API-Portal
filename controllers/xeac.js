@@ -40,14 +40,19 @@ const mapPerson = (json) => {
   return person;
 };
 
-exports.getPeople = () => {
+const filterPeople = (query) => (people) => people.filter(_.matches(query));
+
+exports.getPeople = (query = {}) => {
   const converter = new Converter({});
-  return new Promise((fulfill, reject) => {
+  const promise = new Promise((fulfill, reject) => {
     converter.fromFile(path.join(__dirname, '../data/person.csv'), (err, result) => {
       if (err) reject(err);
       else fulfill(result);
     });
-  }).then(mapPeople);
+  });
+  return promise
+    .then(mapPeople)
+    .then(filterPeople(query));
 };
 
 exports.getPerson = (id) => {
