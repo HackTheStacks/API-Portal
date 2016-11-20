@@ -1,3 +1,13 @@
+## Connecting to the API
+
+You can connect to the API portal at the following *internal* url:
+
+    http://10.20.40.218:3000/<ROUTE>
+
+You must be on the HackTheStacks network to connect to the URL.
+
+Substitute <ROUTE> with pne of the routes listed below.
+
 # API Portal
 ### /api/v1/people
 ```json
@@ -148,3 +158,4 @@ To start the server:
 
 Make a GET request to any of the end points.
 [Postman](https://www.getpostman.com/) works well for testing.
+
