@@ -44,6 +44,19 @@ router.get('/expeditions/:id', (req, res, next) => {
     .then(expedition => res.send(expedition));
 });
 
+router.get('/exhibitions', (req, res, next) => {
+  csv
+    .getExhibitions()
+    .then(exhibitions => exhibitions.filter(_.matches(req.query)))
+    .then(exhibitions => res.send(exhibitions));
+});
+
+router.get('/exhibitions/:id', (req, res, next) => {
+  xeac
+    .getExhibition(req.params.id)
+    .then(exhibition => res.send(exhibition));
+});
+
 router.get('/images', function(req, res, next) {
   omeka
     .getImage(req.query.q)
