@@ -32,10 +32,11 @@ const filterQueryParams = (params) => (entity) => {
 const search = (query) => {
   return Promise.all([
     aspace.search(query),
+    omeka.imageSearch(query),
     dspace.search(query),
     omeka.search(query),
     sierra.search(query),
-    xeac.search(query),
+    xeac.search(query)
   ]).then(responses => [].concat.apply([], responses));
 };
 
@@ -170,34 +171,8 @@ router.get('/resources/omeka', function (req, res, next) {
 
 router.get('/images', function (req, res, next) {
   omeka
-    .search(req.query.q)
-    .then(results => {
-      var tArr = [];
-      for(e in results) {
-        if(results[e]._source.files) {
-          tArr.push(results[e]._source.files.url);
-        }
-      }
-      return tArr;
-    })
-    .then(urlArr => {
-      var imageArr = [];
-      var promArr = [];
-      for(url of urlArr) {
-        var promise = fetch(url)
-          .then(res => {
-            return res.json();
-          })
-          .then(json => {
-            if(json[0]) {
-              imageArr.push(json[0].file_urls.original);
-            }
-          });
-        promArr.push(promise);
-      }
-      return Promise.all(promArr).then( () => imageArr);
-    })
-    .then(imageArr => res.json(imageArr));
+    .imageSearch(req.query.q)
+    .then(results => res.json(results));
 });
 
 router.get('/resources/archives-space', function (req, res, next) {
