@@ -189,7 +189,9 @@ router.get('/images', function (req, res, next) {
             return res.json();
           })
           .then(json => {
-            imageArr.push(json[0].file_urls.original);
+            if(json[0]) {
+              imageArr.push(json[0].file_urls.original);
+            }
           });
         promArr.push(promise);
       }
