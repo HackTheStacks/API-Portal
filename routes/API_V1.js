@@ -17,11 +17,6 @@ router.get('/', function(req, res, next) {
   res.send(results);
 });
 
-router.get('/test', function(req, res, next) {
-  var results = aggregateData();
-  res.send('test');
-});
-
 router.get('/people', function (req, res, next) {
   xeac
     .getPeople()
@@ -37,6 +32,12 @@ router.get('/people/:id', function (req, res, next) {
 router.get('/aspace-test', function (req, res, next) {
   aspace
     .people(req.query.q)
+    .then(results => res.send(results));
+});
+
+router.get('/images', function(req, res, next) {
+  omeka
+    .getImage(req.query.q)
     .then(results => res.send(results));
 });
 
