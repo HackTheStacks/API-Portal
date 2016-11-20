@@ -26,9 +26,13 @@ router.get('/people', (req, res, next) => {
 });
 
 router.get('/people/:id', (req, res, next) => {
+  let response = [];
   xeac
     .getPerson(req.params.id)
-    .then(person => res.send(person));
+    .then(person => {
+      response.push(person);
+      aspace.people(person.name.first + ' ' + person.name.last);
+    }).then(people => req.send(response.concat(people)));
 });
 
 router.get('/expeditions', (req, res, next) => {
