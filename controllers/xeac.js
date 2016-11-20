@@ -140,7 +140,7 @@ const search = query => {
     })
     .then(jsonList => {
       let results = elasticSearch.getResults(jsonList, SOURCE);
-      let jsoned = results.map(result => parser.toJson(result._source.record));
+      let jsoned = results.map(result => JSON.parse(parser.toJson(result._source.record)));
       return jsoned;
     });
 };

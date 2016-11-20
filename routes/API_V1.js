@@ -33,7 +33,7 @@ const search = (query) => {
     omeka.search(query),
     sierra.search(query),
     xeac.search(query)
-  ]);
+  ]).then(responses => [].concat.apply([], responses));
 };
 
 router.get('/search', function (req, res, next) {
@@ -41,10 +41,7 @@ router.get('/search', function (req, res, next) {
     return res.json([]);
   }
   const query = req.query.q;
-  return search(query).then(responses => {
-    let allResps = [].concat.apply([], responses);
-    res.json(allResps);
-  });
+  search(query).then(results => res.json(results));
 });
 
 router.get('/people', (req, res, next) => {
