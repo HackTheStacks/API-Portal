@@ -6,7 +6,7 @@ You can connect to the API portal at the following *internal* url:
 
 You must be on the HackTheStacks network to connect to the URL.
 
-Substitute <ROUTE> with pne of the routes listed below.
+Substitute `<ROUTE>` with pne of the routes listed below.
 
 # API Portal
 You can find the API server at *http://10.20.40.218:3000*
