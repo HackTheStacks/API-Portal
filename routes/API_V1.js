@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fetch = require('node-fetch');
 var _ = require('lodash');
 
 // Import the API controllers
@@ -92,6 +93,36 @@ router.get('/resources/omeka', function (req, res, next) {
   omeka
     .search(req.query.q)
     .then(results => res.json({results: results}));
+});
+
+router.get('/images', function (req, res, next) {
+  omeka
+    .search(req.query.q)
+    .then(results => {
+      var tArr = [];
+      for(e in results) {
+        if(results[e]._source.files) {
+          tArr.push(results[e]._source.files.url);
+        }
+      }
+      return tArr;
+    })
+    .then(urlArr => {
+      var imageArr = [];
+      var promArr = [];
+      for(url of urlArr) {
+        var promise = fetch(url)
+          .then(res => {
+            return res.json();
+          })
+          .then(json => {
+            imageArr.push(json[0].file_urls.original);
+          });
+        promArr.push(promise);
+      }
+      return Promise.all(promArr).then( () => imageArr);
+    })
+    .then(imageArr => res.json(imageArr));
 });
 
 router.get('/resources/archives-space', function (req, res, next) {
