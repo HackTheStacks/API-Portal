@@ -6,7 +6,7 @@ To start the server:
 
 *OR*
 
-> **npm install pm2**
+> **npm install -g pm2**
 
 > **pm2 start npm --name "HackathonAPI" -- start --watch**
 
