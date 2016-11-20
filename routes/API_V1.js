@@ -26,13 +26,21 @@ router.get('/people', (req, res, next) => {
 });
 
 router.get('/people/:id', (req, res, next) => {
-  let response = [];
+  let person = null;
   xeac
     .getPerson(req.params.id)
-    .then(person => {
-      response.push(person);
-      aspace.people(person.name.first + ' ' + person.name.last);
-    }).then(people => req.send(response.concat(people)));
+    .then(p => {
+      person = p;
+      let fullName = person.name.first + ' ' + person.name.last;
+      return Promise.all([
+        aspace.search(fullName),
+        dspace.search(fullName),
+        omeka.search(fullName)
+      ]);
+    }).then(responses => res.json({
+      person: person,
+      results: [].concat.apply([], responses)
+    }));
 });
 
 router.get('/expeditions', (req, res, next) => {
