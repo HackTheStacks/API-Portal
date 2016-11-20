@@ -57,10 +57,10 @@ router.get('/exhibitions/:id', (req, res, next) => {
     .then(exhibition => res.send(exhibition));
 });
 
-router.get('/images', function(req, res, next) {
+router.get('/resources/omeka', function(req, res, next) {
   omeka
-    .getImage(req.query.q)
-    .then(results => res.send(results));
+    .search(req.query.q)
+    .then(results => res.send({results: results}));
 });
 
 router.get('/resources/archives-space', function (req, res, next) {
