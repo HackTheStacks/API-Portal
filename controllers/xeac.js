@@ -11,7 +11,6 @@ var Promise = require('promise');
 
 exports.search = function (query) {
   //Query the API
-  //var results = queryOmkea();
   var results = {
     source: 'xeac',
     name: 'The Name of an xeac Resource',
