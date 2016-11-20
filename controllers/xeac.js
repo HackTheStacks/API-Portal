@@ -4,21 +4,31 @@ var path = require('path');
 var parser = require('xml2json');
 var { Converter } = require('csvtojson');
 var Promise = require('promise');
+var moment = require('moment');
 
-/**
- * xEAC Data Controller
- */
+const mapPeople = (people) => {
+  return people.map(person => {
+    person.id = person['exac_id'];
+    delete person['exac_id'];
+    return person;
+  });
+};
 
-exports.search = function (query) {
-  //Query the API
-  var results = {
-    source: 'xeac',
-    name: 'The Name of an xeac Resource',
-    description: 'Some xeac Data'
+const mapPerson = (json) => {
+  const { cpfDescription: { description, identity }, control } = json['eac-cpf'];
+  return {
+    id: control.recordId,
+    description: description.biogHist,
+    name: {
+      first: identity.nameEntry.part[1].$t,
+      last: identity.nameEntry.part[0].$t
+    },
+    'exist_dates': {
+      start: moment(description.existDates.dateRange.fromDate.standardDate, 'YYYY-MM-DD').valueOf(),
+      end: moment(description.existDates.dateRange.toDate.standardDate, 'YYYY-MM-DD').valueOf()
+    }
   }
-
-  return results;
-}
+};
 
 exports.getPeople = () => {
   const converter = new Converter({});
@@ -27,11 +37,13 @@ exports.getPeople = () => {
       if (err) reject(err);
       else fulfill(result);
     });
-  });
+  }).then(mapPeople);
 };
 
 exports.getPerson = (id) => {
-  return fetch(`${URL}/db/xeac/records/${id}.xml`)
+  return fetch(`http://data.library.amnh.org:8082/exist/rest/db/xeac/records/${id}.xml`)
     .then(response => response.text())
     .then(xml => parser.toJson(xml))
+    .then(json => JSON.parse(json))
+    .then(mapPerson);
 };

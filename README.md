@@ -21,6 +21,8 @@ Make a GET request to any of the end points.
 - /api/v1/department
 - /api/v1/hall
 
+- /api/v1/aspace-test?q=roosevelt
+
 - ?search possible across all
 
 ## xEac
