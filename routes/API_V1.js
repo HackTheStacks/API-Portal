@@ -18,11 +18,6 @@ router.get('/', function (req, res, next) {
   res.send(results);
 });
 
-router.get('/test', function (req, res, next) {
-  var results = aggregateData();
-  res.send('test');
-});
-
 router.get('/people', (req, res, next) => {
   csv
     .getPeople()
