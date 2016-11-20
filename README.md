@@ -24,7 +24,7 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ]
 ```
 **Note**: All APIs support filtering via query params. Ex:
-**/api/vi/people?name=Abbott, Charles G.**
+**/api/v1/people?name=Abbott, Charles G.**
 
 ### /api/v1/people/:id
 ```json
