@@ -12,10 +12,26 @@ var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
 var csv = require('../controllers/csv');
 
+const search = query => {
+  return Promise.all([
+    aspace.search(query),
+    dspace.search(query),
+    omeka.search(query),
+  ])
+    .then(responses => [].concat.apply([], responses));
+};
+
+const formatSearchResponse = (type, obj, results) => {
+  const response = {};
+  response[type] = obj;
+  response.results = results;
+  return response;
+};
+
 /* GET API V1 search results. */
 router.get('/', function (req, res, next) {
   var results = aggregateData();
-  res.send(results);
+  res.send({results: results});
 });
 
 router.get('/people', (req, res, next) => {
@@ -32,15 +48,10 @@ router.get('/people/:id', (req, res, next) => {
     .then(p => {
       person = p;
       let fullName = person.name.first + ' ' + person.name.last;
-      return Promise.all([
-        aspace.search(fullName),
-        dspace.search(fullName),
-        omeka.search(fullName)
-      ]);
-    }).then(responses => res.json({
-      person: person,
-      results: [].concat.apply([], responses)
-    }));
+      return search(fullName);
+    }).then(results => res.json(
+      formatSearchResponse('person', person, results)
+    ));
 });
 
 router.get('/expeditions', (req, res, next) => {
@@ -51,9 +62,15 @@ router.get('/expeditions', (req, res, next) => {
 });
 
 router.get('/expeditions/:id', (req, res, next) => {
+  let expedition = null;
   xeac
     .getExpedition(req.params.id)
-    .then(expedition => res.send(expedition));
+    .then(e => {
+      expedition = e;
+      return search(expedition.name);
+    }).then(results => res.json(
+      formatSearchResponse('expedition', expedition, results)
+    ));
 });
 
 router.get('/exhibitions', (req, res, next) => {
