@@ -50,7 +50,6 @@ function aggregateData() {
   var sierraResults = sierra.search('Test query');
   var snacResults = snac.search('Test query');
   var wordpressResults = wordpress.search('Test query');
-  var xeacResults = xeac.search('Test query');
 
   resultsArray.push(omekaResults);
   resultsArray.push(aspaceResults);
@@ -58,7 +57,6 @@ function aggregateData() {
   resultsArray.push(sierraResults);
   resultsArray.push(snacResults);
   resultsArray.push(wordpressResults);
-  resultsArray.push(xeacResults);
 
   return resultsArray;
 }
