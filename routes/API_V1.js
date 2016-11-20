@@ -12,8 +12,18 @@ var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
 var csv = require('../controllers/csv');
 
-const search = query => {
+const formatSearchResponse = (type, obj, results) => {
+  const response = {};
+  response[type] = obj;
+  response.results = results;
+  return response;
+};
 
+const filterQueryParams = (params) => (entity) => {
+  return Object.keys(params).every((key) => {
+    if (typeof params[key] !== 'string') return params[key] === entity[key];
+    return entity[key].includes(params[key]);
+  });
 };
 
 router.get('/search', function (req, res, next) {
@@ -32,20 +42,6 @@ router.get('/search', function (req, res, next) {
     res.json(allResps);
   });
 });
-
-const formatSearchResponse = (type, obj, results) => {
-  const response = {};
-  response[type] = obj;
-  response.results = results;
-  return response;
-};
-
-const filterQueryParams = (params) => (entity) => {
-  return Object.keys(params).every((key) => {
-    if (typeof params[key] !== 'string') return params[key] === entity[key];
-    return entity[key].includes(params[key]);
-  });
-};
 
 router.get('/people', (req, res, next) => {
   csv
