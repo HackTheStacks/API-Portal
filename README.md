@@ -26,6 +26,14 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ```
 **Note**: The search endpoint results are largely unstructured.
 
+### /api/v1/image?q=<QUERY>
+```json
+[
+  "http://lbry-web-007.amnh.org/digital/files/original/297702703c355792da5aee71b242bac8.jpg",
+  "http://lbry-web-007.amnh.org/digital/files/original/f2369cbc0cec108b08c2e3d9ea3c8bff.jpg",
+  "http://lbry-web-007.amnh.org/digital/files/original/9a773b7231a3518bbef778d75702fdeb.jpg",
+]
+```
 
 ### /api/v1/people
 ```json
