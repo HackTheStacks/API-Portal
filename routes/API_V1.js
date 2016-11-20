@@ -22,7 +22,7 @@ const formatSearchResponse = (type, obj, results) => {
 const filterQueryParams = (params) => (entity) => {
   return Object.keys(params).every((key) => {
     if (typeof params[key] !== 'string') return params[key] === entity[key];
-    return entity[key].includes(params[key]);
+    return entity[key].toLowerCase().includes(params[key].toLowerCase());
   });
 };
 
@@ -32,7 +32,7 @@ const search = (query) => {
     dspace.search(query),
     omeka.search(query),
     sierra.search(query),
-    xeac.search(query)
+    xeac.search(query),
   ]).then(responses => [].concat.apply([], responses));
 };
 
