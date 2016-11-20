@@ -45,7 +45,7 @@ router.get('/people', (req, res, next) => {
   csv
     .getPeople()
     .then(people => people.filter(filterQueryParams(req.query)))
-    .then(people => res.send(people));
+    .then(people => res.json(people));
 });
 
 router.get('/people/:id', (req, res, next) => {
@@ -65,7 +65,7 @@ router.get('/expeditions', (req, res, next) => {
   csv
     .getExpeditions()
     .then(expeditions => expeditions.filter(filterQueryParams(req.query)))
-    .then(expeditions => res.send(expeditions));
+    .then(expeditions => res.json(expeditions));
 });
 
 router.get('/expeditions/:id', (req, res, next) => {
@@ -84,26 +84,40 @@ router.get('/exhibitions', (req, res, next) => {
   csv
     .getExhibitions()
     .then(exhibitions => exhibitions.filter(filterQueryParams(req.query)))
-    .then(exhibitions => res.send(exhibitions));
+    .then(exhibitions => res.json(exhibitions));
 });
 
 router.get('/exhibitions/:id', (req, res, next) => {
-  let exhibition = null;
-  xeac
-    .getExhibition(req.params.id)
-    .then(e => {
-      exhibition = e;
-      return search(exhibition.name);
-    }).then(results => res.json(
-      formatSearchResponse('exhibition', exhibition, results)
-    ));
+  let finalExhibition = null;
+  console.log('exhibitions')
+  csv
+    .getExhibitions()
+    .then(exhibitions => exhibitions.filter(filterQueryParams({ id: req.params.id })))
+    .then(results => {
+      console.log(results);
+      return results;
+    })
+    .then(exhibitions => exhibitions[0])
+    .then(exhibition => {
+      if (!exhibition.permanent) return exhibition;
+      return xeac.getExhibition(exhibition.id)
+    })
+    .then(exhibition => {
+      finalExhibition = exhibition
+      return exhibition;
+    })
+    .then(exhibition => search(exhibition.name))
+    .then(results => res.json(
+      formatSearchResponse('exhibition', finalExhibition, results)
+    ))
+    .catch(error => console.log(error));
 });
 
 router.get('/departments', (req, res, next) => {
   csv
     .getDepartments()
     .then(departments => departments.filter(filterQueryParams(req.query)))
-    .then(departments => res.send(departments));
+    .then(departments => res.json(departments));
 });
 
 router.get('/departments/:id', (req, res, next) => {
