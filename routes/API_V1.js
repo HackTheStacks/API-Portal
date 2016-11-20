@@ -12,6 +12,8 @@ var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
 var csv = require('../controllers/csv');
 
+const check = (object, path) => typeof _.at(object, path)[0] !== 'undefined';
+
 const formatSearchResponse = (type, obj, results) => {
   const response = {};
   response[type] = obj;
@@ -56,9 +58,7 @@ router.get('/people/:id', (req, res, next) => {
   xeac
     .getPerson(req.params.id)
     .then(person => {
-      if (typeof _.at(person, 'name.first')[0] !== 'undefined' &&
-        typeof _.at(person, 'name.first')[0] !== 'undefined'
-      ) {
+      if (check(person, 'name.first') && check(person, 'name.first')) {
         finalPerson = person;
         return `${person.name.first} ${person.name.last}`;
       }
@@ -89,7 +89,7 @@ router.get('/expeditions/:id', (req, res, next) => {
   xeac
     .getExpedition(req.params.id)
     .then(expedition => {
-      if (typeof expedition.name !== 'undefined') {
+      if (check(expedition, 'name')) {
         return expedition;
       }
       return csv
@@ -140,7 +140,7 @@ router.get('/departments/:id', (req, res, next) => {
   xeac
     .getDepartment(req.params.id)
     .then(department => {
-      if (typeof department.name !== 'undefined') {
+      if (check(department, 'name')) {
         return department;
       }
       return csv
