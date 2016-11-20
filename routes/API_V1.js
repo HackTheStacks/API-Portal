@@ -73,19 +73,19 @@ router.get('/departments/:id', (req, res, next) => {
 router.get('/resources/omeka', function(req, res, next) {
   omeka
     .search(req.query.q)
-    .then(results => res.send({results: results}));
+    .then(results => res.json({results: results}));
 });
 
 router.get('/resources/archives-space', function (req, res, next) {
   aspace
     .search(req.query.q)
-    .then(results => res.send({results: results}));
+    .then(results => res.json({results: results}));
 });
 
 router.get('/resources/dspace', function (req, res, next) {
   dspace
     .search(req.query.q)
-    .then(results => res.send({results: results}));
+    .then(results => res.json({results: results}));
 });
 
 // Query all the APIs
