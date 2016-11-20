@@ -2,6 +2,7 @@ var fetch = require('node-fetch');
 var parser = require('xml2json');
 var moment = require('moment');
 var _ = require('lodash');
+var elasticSearch = require('./elasticSearch.js');
 
 const mapPerson = (json) => {
   const person = { id: _.at(json, 'eac-cpf.control.recordId')[0] };
@@ -123,6 +124,28 @@ const fetchXEAC = (id) => {
     .then(json => JSON.parse(json));
 };
 
+const SOURCE = 'xeac';
+const SEARCH_PATHS = [
+  'xeac_record'
+];
+const SIZE = 200;
+
+const search = query => {
+  const uris = elasticSearch.getSearchURIs(SEARCH_PATHS);
+  return Promise.all(uris.map(uri => (
+    fetch(uri, elasticSearch.getOptions(query, SIZE))
+  )))
+    .then(resList => {
+      return Promise.all(resList.map(res => res.json()));
+    })
+    .then(jsonList => {
+      let results = elasticSearch.getResults(jsonList, SOURCE);
+      let jsoned = results.map(result => parser.toJson(result._source.record));
+      return jsoned;
+    });
+};
+
+exports.search = search;
 exports.getPerson = (id) => fetchXEAC(id).then(mapPerson);
 exports.getExpedition = (id) => fetchXEAC(id).then(mapExpedition);
 exports.getExhibition = (id) => fetchXEAC(id).then(mapExhibition);

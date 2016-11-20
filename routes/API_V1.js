@@ -13,13 +13,25 @@ var xeac = require('../controllers/xeac');
 var csv = require('../controllers/csv');
 
 const search = query => {
+
+};
+
+router.get('/search', function (req, res, next) {
+  if (!req.query.query) {
+    return res.json([]);
+  }
+  const query = req.query.query;
   return Promise.all([
     aspace.search(query),
     dspace.search(query),
     omeka.search(query),
-  ])
-    .then(responses => [].concat.apply([], responses));
-};
+    sierra.search(query),
+    xeac.search(query)
+  ]).then(responses => {
+    let allResps = [].concat.apply([], responses);
+    res.json(allResps);
+  });
+});
 
 const formatSearchResponse = (type, obj, results) => {
   const response = {};
@@ -27,12 +39,6 @@ const formatSearchResponse = (type, obj, results) => {
   response.results = results;
   return response;
 };
-
-/* GET API V1 search results. */
-router.get('/', function (req, res, next) {
-  var results = aggregateData();
-  res.send({results: results});
-});
 
 router.get('/people', (req, res, next) => {
   csv
