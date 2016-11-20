@@ -17,7 +17,6 @@
     "morgan": "~1.7.0",
     "node-fetch": "^1.6.3",
     "promise": "^7.1.1",
-    "serve-favicon": "^2.3.2",
     "xml2json": "^0.10.0"
   }
 }
