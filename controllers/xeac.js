@@ -40,8 +40,6 @@ const mapPerson = (json) => {
   return person;
 };
 
-const filterPeople = (query) => (people) => people.filter(_.matches(query));
-
 exports.getPeople = (query = {}) => {
   const converter = new Converter({});
   const promise = new Promise((fulfill, reject) => {
@@ -51,8 +49,7 @@ exports.getPeople = (query = {}) => {
     });
   });
   return promise
-    .then(mapPeople)
-    .then(filterPeople(query));
+    .then(mapPeople);
 };
 
 exports.getPerson = (id) => {

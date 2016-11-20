@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var _ = require('lodash');
 
 // Import the API controllers
 var omeka = require('../controllers/omeka');
@@ -21,13 +22,14 @@ router.get('/test', function (req, res, next) {
   res.send('test');
 });
 
-router.get('/people', function (req, res, next) {
+router.get('/people', (req, res, next) => {
   xeac
-    .getPeople(req.query)
+    .getPeople()
+    .then(people => people.filter(_.matches(req.query))
     .then(people => res.send(people));
 });
 
-router.get('/people/:id', function (req, res, next) {
+router.get('/people/:id', (req, res, next) => {
   xeac
     .getPerson(req.params.id)
     .then(person => res.send(person));
