@@ -92,7 +92,7 @@ router.get('/exhibitions', (req, res, next) => {
 
 router.get('/exhibitions/:id', (req, res, next) => {
   let finalExhibition = null;
-  console.log('exhibitions')
+  console.log('exhibitions');
   csv
     .getExhibitions()
     .then(exhibitions => exhibitions.filter(filterQueryParams({ id: req.params.id })))
@@ -103,10 +103,10 @@ router.get('/exhibitions/:id', (req, res, next) => {
     .then(exhibitions => exhibitions[0])
     .then(exhibition => {
       if (!exhibition.permanent) return exhibition;
-      return xeac.getExhibition(exhibition.id)
+      return xeac.getExhibition(exhibition.id);
     })
     .then(exhibition => {
-      finalExhibition = exhibition
+      finalExhibition = exhibition;
       return exhibition;
     })
     .then(exhibition => search(exhibition.name))
