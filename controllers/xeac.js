@@ -1,19 +1,7 @@
 var fetch = require('node-fetch');
-var fs = require('fs');
-var path = require('path');
 var parser = require('xml2json');
-var { Converter } = require('csvtojson');
-var Promise = require('promise');
 var moment = require('moment');
 var _ = require('lodash');
-
-const mapPeople = (people) => {
-  return people.map(person => {
-    person.id = person['exac_id'];
-    delete person['exac_id'];
-    return person;
-  });
-};
 
 const mapPerson = (json) => {
   const person = { id: _.at(json, 'eac-cpf.control.recordId')[0] };
@@ -38,18 +26,6 @@ const mapPerson = (json) => {
     };
   }
   return person;
-};
-
-exports.getPeople = (query = {}) => {
-  const converter = new Converter({});
-  const promise = new Promise((fulfill, reject) => {
-    converter.fromFile(path.join(__dirname, '../data/person.csv'), (err, result) => {
-      if (err) reject(err);
-      else fulfill(result);
-    });
-  });
-  return promise
-    .then(mapPeople);
 };
 
 exports.getPerson = (id) => {

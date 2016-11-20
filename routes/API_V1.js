@@ -10,6 +10,7 @@ var sierra = require('../controllers/sierra');
 var snac = require('../controllers/snac');
 var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
+var csv = require('../controllers/csv');
 
 /* GET API V1 search results. */
 router.get('/', function (req, res, next) {
@@ -23,9 +24,9 @@ router.get('/test', function (req, res, next) {
 });
 
 router.get('/people', (req, res, next) => {
-  xeac
+  csv
     .getPeople()
-    .then(people => people.filter(_.matches(req.query))
+    .then(people => people.filter(_.matches(req.query)))
     .then(people => res.send(people));
 });
 
@@ -33,6 +34,13 @@ router.get('/people/:id', (req, res, next) => {
   xeac
     .getPerson(req.params.id)
     .then(person => res.send(person));
+});
+
+router.get('/expeditions', (req, res, next) => {
+  csv
+    .getExpeditions()
+    .then(expeditions => expeditions.filter(_.matches(req.query)))
+    .then(expeditions => res.send(expeditions));
 });
 
 router.get('/resources/archives-space', function (req, res, next) {
