@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Link } from 'react-router';
 
 export default class List extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default class List extends Component {
           <Card key={index}>
             <CardHeader
               title={item.name}
-              subtitle={item.id}
+              subtitle={<Link to={`/${this.props.entities}/${item.id}`}>{item.id}</Link>}
             />
           </Card>
         ))}
