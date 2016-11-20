@@ -81,9 +81,15 @@ router.get('/exhibitions', (req, res, next) => {
 });
 
 router.get('/exhibitions/:id', (req, res, next) => {
+  let exhibition = null;
   xeac
     .getExhibition(req.params.id)
-    .then(exhibition => res.send(exhibition));
+    .then(e => {
+      exhibition = e;
+      return search(exhibition.name);
+    }).then(results => res.json(
+      formatSearchResponse('exhibition', exhibition, results)
+    ));
 });
 
 router.get('/departments', (req, res, next) => {
@@ -94,9 +100,15 @@ router.get('/departments', (req, res, next) => {
 });
 
 router.get('/departments/:id', (req, res, next) => {
+  let department;
   xeac
     .getDepartment(req.params.id)
-    .then(department => res.send(department));
+    .then(d => {
+      department = d;
+      return search(department.name);
+    }).then(results => res.json(
+      formatSearchResponse('department', department, results)
+    ));
 });
 
 router.get('/resources/sierra', function (req, res, next) {
