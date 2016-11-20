@@ -70,7 +70,13 @@ router.get('/departments/:id', (req, res, next) => {
     .then(department => res.send(department));
 });
 
-router.get('/resources/omeka', function(req, res, next) {
+router.get('/resources/sierra', function (req, res, next) {
+  sierra
+    .search(req.query.q)
+    .then(results => res.json({results: results}));
+});
+
+router.get('/resources/omeka', function (req, res, next) {
   omeka
     .search(req.query.q)
     .then(results => res.json({results: results}));

@@ -1,17 +1,23 @@
+var fetch = require('node-fetch');
+var elasticSearch = require('./elasticSearch.js');
 
 /**
  * Sierra Data Controller
  */
 
-exports.search = function (query) {
-  //Query the API
-  //var results = queryOmkea();
-  var results = {
-    source: 'sierra',
-    name: 'The Name of an sierra Resource',
-    description: 'Some sierra Data'
-  }
-  console.log('Test Data');
+const SOURCE = 'sierra';
+const SEARCH_PATHS = [
+  'sierra_bib',
+];
+const SIZE = 200;
 
-  return results;
-}
+const search = query => {
+  const uris = elasticSearch.getSearchURIs(SEARCH_PATHS);
+  return Promise.all(uris.map(uri => (
+    fetch(uri, elasticSearch.getOptions(query, SIZE))
+  )))
+    .then(resList => Promise.all(resList.map(res => res.json())))
+    .then(jsonList => elasticSearch.getResults(jsonList, SOURCE));
+};
+
+exports.search = search;

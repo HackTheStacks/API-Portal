@@ -15,7 +15,7 @@ const getSearchURIs = paths => paths.map(p => `${BASE}/${p}/_search`);
 
 const getResults = (jsonList, source) => {
   const hitsList = jsonList.map(json => json.hits.hits);
-  const mergedResults = [].concat.apply(this, hitsList);
+  const mergedResults = [].concat.apply([], hitsList);
   const sortedResults = _.sortBy(mergedResults, '_score').reverse();
   return sortedResults.map(r => Object.assign({}, r, {source: source}));
 };

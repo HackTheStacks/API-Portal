@@ -5,7 +5,7 @@ var elasticSearch = require('./elasticSearch.js');
  * DSpace Data Controller
  */
 
-const SOURCE = 'DSpace';
+const SOURCE = 'dspace';
 const SEARCH_PATHS = [
   'dspace_item',
   'dspace_collection',

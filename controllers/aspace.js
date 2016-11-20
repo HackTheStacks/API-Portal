@@ -1,10 +1,10 @@
 var fetch = require('node-fetch');
 
 /**
- * ArchiveSpace Data Controller
+ * ArchivesSpace Data Controller
  */
 
-const SOURCE = 'ArchivesSpace';
+const SOURCE = 'archives-space';
 const SEARCH_BASE =
   'http://lbry-web-006.amnh.org:8089/repositories/3/search?page=1';
 const SESSION_HEADER = 'X-ArchivesSpace-Session';
