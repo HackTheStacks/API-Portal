@@ -26,18 +26,22 @@ const filterQueryParams = (params) => (entity) => {
   });
 };
 
-router.get('/search', function (req, res, next) {
-  if (!req.query.query) {
-    return res.json([]);
-  }
-  const query = req.query.query;
+const search = (query) => {
   return Promise.all([
     aspace.search(query),
     dspace.search(query),
     omeka.search(query),
     sierra.search(query),
     xeac.search(query)
-  ]).then(responses => {
+  ]);
+};
+
+router.get('/search', function (req, res, next) {
+  if (!req.query.query) {
+    return res.json([]);
+  }
+  const query = req.query.query;
+  return search(query).then(responses => {
     let allResps = [].concat.apply([], responses);
     res.json(allResps);
   });
