@@ -25,7 +25,7 @@ router.get('/test', function(req, res, next) {
 router.get('/people', function (req, res, next) {
   xeac
     .getPeople()
-    .then(people => res.send(people.slice(0, 10)));
+    .then(people => res.send(people));
 });
 
 router.get('/people/:id', function (req, res, next) {
