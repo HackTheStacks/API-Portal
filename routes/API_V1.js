@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-//Import the API controllers
+// Import the API controllers
 var omeka = require('../controllers/omeka');
 var aspace = require('../controllers/aspace');
 var dspace = require('../controllers/dspace');
@@ -10,14 +10,13 @@ var snac = require('../controllers/snac');
 var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
 
-
 /* GET API V1 search results. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   var results = aggregateData();
   res.send(results);
 });
 
-router.get('/test', function(req, res, next) {
+router.get('/test', function (req, res, next) {
   var results = aggregateData();
   res.send('test');
 });
@@ -34,14 +33,14 @@ router.get('/people/:id', function (req, res, next) {
     .then(person => res.send(person));
 });
 
-router.get('/aspace-test', function (req, res, next) {
+router.get('/resources/archives-space', function (req, res, next) {
   aspace
-    .people(req.query.q)
-    .then(results => res.send(results));
+    .search(req.query.q)
+    .then(results => res.send({results: results}));
 });
 
-//Query all the APIs
-function aggregateData() {
+// Query all the APIs
+function aggregateData () {
   var resultsArray = [];
 
   var omekaResults = omeka.search('Test query');

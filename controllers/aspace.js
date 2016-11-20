@@ -13,8 +13,20 @@ const PEOPLE_QUERYSTRING =
 const LOGIN_BASE = 'http://lbry-web-006.amnh.org:8089/users/ehammer/login';
 const LOGIN_HEADERS = {'Content-Type': 'application/x-www-form-urlencoded'};
 
-const addSource = results => results
-  .map(r => Object.assign({}, r, {source: SOURCE}));
+const getResults = json => json.results.map(r => {
+  const newResult = Object.assign({}, r, {source: SOURCE});
+  if (newResult.hasOwnProperty('json')) {
+    newResult.json = JSON.parse(newResult.json);
+  }
+  return newResult;
+});
+
+const getSearchOptions = session => {
+  const options = {};
+  options.headers = {};
+  options.headers[SESSION_HEADER] = session;
+  return options;
+};
 
 const login = () => (
   fetch(`${LOGIN_BASE}`, {
@@ -27,34 +39,23 @@ const login = () => (
 );
 
 const people = (query, session) => {
-  const options = {};
-  options.headers = {};
-  options.headers[SESSION_HEADER] = session;
+  const options = getSearchOptions(session);
   return fetch(`${SEARCH_BASE}&q=${query}&${PEOPLE_QUERYSTRING}`, options)
-    .then(res => {
-        /* if (res.status === 403) {
-        return login
-          .then(() => people(query));
-      } */
-      return res.json();
-    })
-    .then(json => addSource(json.results));
+    .then(res => res.json())
+    .then(getResults);
 };
 
-exports.search = function (query) {
-  // Query the API
-  // var results = queryOmkea();
-  var results = {
-    source: 'aspace',
-    name: 'The Name of an aspace Resource',
-    description: 'Some aspace Data',
-  };
-
-  console.log('Test Data');
-
-  return results;
+const search = (query, session) => {
+  const options = getSearchOptions(session);
+  return fetch(`${SEARCH_BASE}&q=${query}`, options)
+    .then(res => res.json())
+    .then(getResults);
 };
 
 exports.people = query => (
-  login().then((session) => people(query, session))
+  login().then(session => people(query, session))
+);
+
+exports.search = query => (
+  login().then(session => search(query, session))
 );
