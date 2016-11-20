@@ -28,6 +28,13 @@ const formatSearchResponse = (type, obj, results) => {
   return response;
 };
 
+const filterQueryParams = (params) => (entity) => {
+  return Object.keys(params).every((key) => {
+    if (typeof params[key] !== 'string') return params[key] === entity[key];
+    return entity[key].includes(params[key]);
+  })
+};
+
 /* GET API V1 search results. */
 router.get('/', function (req, res, next) {
   var results = aggregateData();
@@ -37,7 +44,7 @@ router.get('/', function (req, res, next) {
 router.get('/people', (req, res, next) => {
   csv
     .getPeople()
-    .then(people => people.filter(_.matches(req.query)))
+    .then(people => people.filter(filterQueryParams(req.query)))
     .then(people => res.send(people));
 });
 
@@ -57,7 +64,7 @@ router.get('/people/:id', (req, res, next) => {
 router.get('/expeditions', (req, res, next) => {
   csv
     .getExpeditions()
-    .then(expeditions => expeditions.filter(_.matches(req.query)))
+    .then(expeditions => expeditions.filter(filterQueryParams(req.query)))
     .then(expeditions => res.send(expeditions));
 });
 
@@ -76,7 +83,7 @@ router.get('/expeditions/:id', (req, res, next) => {
 router.get('/exhibitions', (req, res, next) => {
   csv
     .getExhibitions()
-    .then(exhibitions => exhibitions.filter(_.matches(req.query)))
+    .then(exhibitions => exhibitions.filter(filterQueryParams(req.query)))
     .then(exhibitions => res.send(exhibitions));
 });
 
@@ -95,7 +102,7 @@ router.get('/exhibitions/:id', (req, res, next) => {
 router.get('/departments', (req, res, next) => {
   csv
     .getDepartments()
-    .then(departments => departments.filter(_.matches(req.query)))
+    .then(departments => departments.filter(filterQueryParams(req.query)))
     .then(departments => res.send(departments));
 });
 
