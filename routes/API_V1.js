@@ -17,11 +17,22 @@ router.get('/', function(req, res, next) {
   res.send(results);
 });
 
+router.get('/people', function (req, res, next) {
+  const people = xeac.getPeople();
+  console.log(people);
+  res.send(people.slice(0, 10));
+});
+
+router.get('/people/:id', function (req, res, next) {
+  xeac
+    .getPerson(req.params.id)
+    .then(person => res.send(person));
+});
 
 //Query all the APIs
 function aggregateData() {
   var resultsArray = [];
-  
+
   var omekaResults = omeka.search('Test query');
   var aspaceResults = aspace.search('Test query');
   var dspaceResults = dspace.search('Test query');
