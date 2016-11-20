@@ -57,6 +57,19 @@ router.get('/exhibitions/:id', (req, res, next) => {
     .then(exhibition => res.send(exhibition));
 });
 
+router.get('/departments', (req, res, next) => {
+  csv
+    .getDepartments()
+    .then(departments => departments.filter(_.matches(req.query)))
+    .then(departments => res.send(departments));
+});
+
+router.get('/departments/:id', (req, res, next) => {
+  xeac
+    .getDepartment(req.params.id)
+    .then(department => res.send(department));
+});
+
 router.get('/images', function(req, res, next) {
   omeka
     .getImage(req.query.q)

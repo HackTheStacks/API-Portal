@@ -25,3 +25,4 @@ const getCSV = (entity) => (query = {}) => {
 exports.getPeople = getCSV('person');
 exports.getExpeditions = getCSV('expedition');
 exports.getExhibitions = getCSV('exhibition');
+exports.getDepartments = getCSV('department');
