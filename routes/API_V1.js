@@ -40,11 +40,18 @@ const formatSearchResponse = (type, obj, results) => {
   return response;
 };
 
+const filterQueryParams = (params) => (entity) => {
+  return Object.keys(params).every((key) => {
+    if (typeof params[key] !== 'string') return params[key] === entity[key];
+    return entity[key].includes(params[key]);
+  });
+};
+
 router.get('/people', (req, res, next) => {
   csv
     .getPeople()
-    .then(people => people.filter(_.matches(req.query)))
-    .then(people => res.send(people));
+    .then(people => people.filter(filterQueryParams(req.query)))
+    .then(people => res.json(people));
 });
 
 router.get('/people/:id', (req, res, next) => {
@@ -63,8 +70,8 @@ router.get('/people/:id', (req, res, next) => {
 router.get('/expeditions', (req, res, next) => {
   csv
     .getExpeditions()
-    .then(expeditions => expeditions.filter(_.matches(req.query)))
-    .then(expeditions => res.send(expeditions));
+    .then(expeditions => expeditions.filter(filterQueryParams(req.query)))
+    .then(expeditions => res.json(expeditions));
 });
 
 router.get('/expeditions/:id', (req, res, next) => {
@@ -82,27 +89,53 @@ router.get('/expeditions/:id', (req, res, next) => {
 router.get('/exhibitions', (req, res, next) => {
   csv
     .getExhibitions()
-    .then(exhibitions => exhibitions.filter(_.matches(req.query)))
-    .then(exhibitions => res.send(exhibitions));
+    .then(exhibitions => exhibitions.filter(filterQueryParams(req.query)))
+    .then(exhibitions => res.json(exhibitions));
 });
 
 router.get('/exhibitions/:id', (req, res, next) => {
-  xeac
-    .getExhibition(req.params.id)
-    .then(exhibition => res.send(exhibition));
+  let finalExhibition = null;
+  console.log('exhibitions')
+  csv
+    .getExhibitions()
+    .then(exhibitions => exhibitions.filter(filterQueryParams({ id: req.params.id })))
+    .then(results => {
+      console.log(results);
+      return results;
+    })
+    .then(exhibitions => exhibitions[0])
+    .then(exhibition => {
+      if (!exhibition.permanent) return exhibition;
+      return xeac.getExhibition(exhibition.id)
+    })
+    .then(exhibition => {
+      finalExhibition = exhibition
+      return exhibition;
+    })
+    .then(exhibition => search(exhibition.name))
+    .then(results => res.json(
+      formatSearchResponse('exhibition', finalExhibition, results)
+    ))
+    .catch(error => console.log(error));
 });
 
 router.get('/departments', (req, res, next) => {
   csv
     .getDepartments()
-    .then(departments => departments.filter(_.matches(req.query)))
-    .then(departments => res.send(departments));
+    .then(departments => departments.filter(filterQueryParams(req.query)))
+    .then(departments => res.json(departments));
 });
 
 router.get('/departments/:id', (req, res, next) => {
+  let department;
   xeac
     .getDepartment(req.params.id)
-    .then(department => res.send(department));
+    .then(d => {
+      department = d;
+      return search(department.name);
+    }).then(results => res.json(
+      formatSearchResponse('department', department, results)
+    ));
 });
 
 router.get('/resources/sierra', function (req, res, next) {
@@ -128,26 +161,5 @@ router.get('/resources/dspace', function (req, res, next) {
     .search(req.query.q)
     .then(results => res.json({results: results}));
 });
-
-// Query all the APIs
-function aggregateData () {
-  var resultsArray = [];
-
-  var omekaResults = omeka.search('Test query');
-  var aspaceResults = aspace.search('Test query');
-  var dspaceResults = dspace.search('Test query');
-  var sierraResults = sierra.search('Test query');
-  var snacResults = snac.search('Test query');
-  var wordpressResults = wordpress.search('Test query');
-
-  resultsArray.push(omekaResults);
-  resultsArray.push(aspaceResults);
-  resultsArray.push(dspaceResults);
-  resultsArray.push(sierraResults);
-  resultsArray.push(snacResults);
-  resultsArray.push(wordpressResults);
-
-  return resultsArray;
-}
 
 module.exports = router;

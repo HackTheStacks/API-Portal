@@ -148,5 +148,6 @@ const search = query => {
 exports.search = search;
 exports.getPerson = (id) => fetchXEAC(id).then(mapPerson);
 exports.getExpedition = (id) => fetchXEAC(id).then(mapExpedition);
-exports.getExhibition = (id) => fetchXEAC(id).then(mapExhibition);
 exports.getDepartment = (id) => fetchXEAC(id).then(mapDepartment);
+
+exports.getExhibition = (id) => fetchXEAC(id).then(mapExhibition);
