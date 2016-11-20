@@ -10,7 +10,7 @@ You must be on the *HackTheStacks* network to connect to the URL.
 
 Substitute `<ROUTE>` with one of the routes listed below.
 
-### /api/v1/search?q=<QUERY>
+### /api/v1/search?q=`<QUERY>`
 ```json
 [
   {
@@ -26,7 +26,7 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ```
 **Note**: The search endpoint results are largely unstructured.
 
-### /api/v1/image?q=<QUERY>
+### /api/v1/image?q=`<QUERY>`
 ```json
 [
   "http://lbry-web-007.amnh.org/digital/files/original/297702703c355792da5aee71b242bac8.jpg",
