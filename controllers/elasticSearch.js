@@ -14,8 +14,8 @@ const _getBody = (query, size) => {
 
 const getBody = (query, size) => {
     return query !== null && query !== undefined
-	? _getBody(query.split(' ').join(' AND '), size)
-	: [];
+      ? _getBody(query.split(' ').join(' AND '), size)
+      : [];
 };
 
 const getOptions = (query, size, flexible) => ({
