@@ -37,10 +37,10 @@ const search = (query) => {
 };
 
 router.get('/search', function (req, res, next) {
-  if (!req.query.query) {
+  if (!req.query.q) {
     return res.json([]);
   }
-  const query = req.query.query;
+  const query = req.query.q;
   return search(query).then(responses => {
     let allResps = [].concat.apply([], responses);
     res.json(allResps);
