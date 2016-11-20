@@ -44,25 +44,26 @@ router.get('/expeditions/:id', (req, res, next) => {
     .then(expedition => res.send(expedition));
 });
 
-router.get('/resources/archives-space', function (req, res, next) {
-  aspace
-    .search(req.query.q)
-    .then(results => res.send({results: results}));
-});
-
-<<<<<<< HEAD
 router.get('/images', function(req, res, next) {
   omeka
     .getImage(req.query.q)
     .then(results => res.send(results));
 });
 
-//Query all the APIs
-function aggregateData() {
-=======
+router.get('/resources/archives-space', function (req, res, next) {
+  aspace
+    .search(req.query.q)
+    .then(results => res.send({results: results}));
+});
+
+router.get('/resources/dspace', function (req, res, next) {
+  dspace
+    .search(req.query.q)
+    .then(results => res.send({results: results}));
+});
+
 // Query all the APIs
 function aggregateData () {
->>>>>>> 43b40bb87fc8607aa3120891259c8565377a64b7
   var resultsArray = [];
 
   var omekaResults = omeka.search('Test query');
