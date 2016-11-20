@@ -17,15 +17,17 @@ exports.search = function (query) {
     name: 'The Name of an xeac Resource',
     description: 'Some xeac Data'
   }
-  console.log('Test Data');
 
   return results;
 }
 
 exports.getPeople = () => {
   const converter = new Converter({});
-  converter.fromFile(path.join(__dirname, '../data/person.csv'), (err, result) => {
-
+  return new Promise((fulfill, reject) => {
+    converter.fromFile(path.join(__dirname, '../data/person.csv'), (err, result) => {
+      if (err) reject(err);
+      else fulfill(result);
+    });
   });
 };
 
