@@ -52,15 +52,25 @@ router.get('/people', (req, res, next) => {
 });
 
 router.get('/people/:id', (req, res, next) => {
-  let person = null;
+  let finalPerson = null;
   xeac
     .getPerson(req.params.id)
-    .then(p => {
-      person = p;
-      let fullName = person.name.first + ' ' + person.name.last;
-      return search(fullName);
-    }).then(results => res.json(
-      formatSearchResponse('person', person, results)
+    .then(person => {
+      if (typeof _.at(person, 'name.first')[0] !== 'undefined' &&
+        typeof _.at(person, 'name.first')[0] !== 'undefined'
+      ) {
+        finalPerson = person;
+        return `${person.name.first} ${person.name.last}`;
+      }
+      return csv
+        .getPeople()
+        .then(people => people.filter(filterQueryParams({ id: req.params.id })))
+        .then(people => people[0])
+        .then(person => person.name)
+    })
+    .then(fullName => search(fullName))
+    .then(results => res.json(
+      formatSearchResponse('person', finalPerson, results)
     ));
 });
 
@@ -92,14 +102,9 @@ router.get('/exhibitions', (req, res, next) => {
 
 router.get('/exhibitions/:id', (req, res, next) => {
   let finalExhibition = null;
-  console.log('exhibitions');
   csv
     .getExhibitions()
     .then(exhibitions => exhibitions.filter(filterQueryParams({ id: req.params.id })))
-    .then(results => {
-      console.log(results);
-      return results;
-    })
     .then(exhibitions => exhibitions[0])
     .then(exhibition => {
       if (!exhibition.permanent) return exhibition;
@@ -112,8 +117,7 @@ router.get('/exhibitions/:id', (req, res, next) => {
     .then(exhibition => search(exhibition.name))
     .then(results => res.json(
       formatSearchResponse('exhibition', finalExhibition, results)
-    ))
-    .catch(error => console.log(error));
+    ));
 });
 
 router.get('/departments', (req, res, next) => {
