@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var _ = require('lodash');
 
-//Import the API controllers
+// Import the API controllers
 var omeka = require('../controllers/omeka');
 var aspace = require('../controllers/aspace');
 var dspace = require('../controllers/dspace');
@@ -9,32 +10,52 @@ var sierra = require('../controllers/sierra');
 var snac = require('../controllers/snac');
 var wordpress = require('../controllers/wordpress');
 var xeac = require('../controllers/xeac');
-
+var csv = require('../controllers/csv');
 
 /* GET API V1 search results. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   var results = aggregateData();
   res.send(results);
 });
 
-router.get('/people', function (req, res, next) {
-  xeac
+router.get('/test', function (req, res, next) {
+  var results = aggregateData();
+  res.send('test');
+});
+
+router.get('/people', (req, res, next) => {
+  csv
     .getPeople()
+    .then(people => people.filter(_.matches(req.query)))
     .then(people => res.send(people));
 });
 
-router.get('/people/:id', function (req, res, next) {
+router.get('/people/:id', (req, res, next) => {
   xeac
     .getPerson(req.params.id)
     .then(person => res.send(person));
 });
 
-router.get('/aspace-test', function (req, res, next) {
-  aspace
-    .people(req.query.q)
-    .then(results => res.send(results));
+router.get('/expeditions', (req, res, next) => {
+  csv
+    .getExpeditions()
+    .then(expeditions => expeditions.filter(_.matches(req.query)))
+    .then(expeditions => res.send(expeditions));
 });
 
+router.get('/expeditions/:id', (req, res, next) => {
+  xeac
+    .getExpedition(req.params.id)
+    .then(expedition => res.send(expedition));
+});
+
+router.get('/resources/archives-space', function (req, res, next) {
+  aspace
+    .search(req.query.q)
+    .then(results => res.send({results: results}));
+});
+
+<<<<<<< HEAD
 router.get('/images', function(req, res, next) {
   omeka
     .getImage(req.query.q)
@@ -43,6 +64,10 @@ router.get('/images', function(req, res, next) {
 
 //Query all the APIs
 function aggregateData() {
+=======
+// Query all the APIs
+function aggregateData () {
+>>>>>>> 43b40bb87fc8607aa3120891259c8565377a64b7
   var resultsArray = [];
 
   var omekaResults = omeka.search('Test query');
