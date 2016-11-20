@@ -25,13 +25,19 @@ router.get('/test', function(req, res, next) {
 router.get('/people', function (req, res, next) {
   xeac
     .getPeople()
-    .then(people => res.send(people.slice(0, 10)));
+    .then(people => res.send(people));
 });
 
 router.get('/people/:id', function (req, res, next) {
   xeac
     .getPerson(req.params.id)
     .then(person => res.send(person));
+});
+
+router.get('/aspace-test', function (req, res, next) {
+  aspace
+    .people(req.query.q)
+    .then(results => res.send(results));
 });
 
 //Query all the APIs
