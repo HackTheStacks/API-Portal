@@ -5,9 +5,6 @@ var parser = require('xml2json');
 var { Converter } = require('csvtojson');
 var Promise = require('promise');
 
-/**
- * xEAC Data Controller
- */
 
 exports.search = function (query) {
   //Query the API
@@ -32,7 +29,7 @@ exports.getPeople = () => {
 };
 
 exports.getPerson = (id) => {
-  return fetch(`${URL}/db/xeac/records/${id}.xml`)
+  return fetch(`http://data.library.amnh.org:8082/exist/rest/db/xeac/records/${id}.xml`)
     .then(response => response.text())
     .then(xml => parser.toJson(xml))
 };
