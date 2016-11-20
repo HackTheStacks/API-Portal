@@ -27,7 +27,7 @@ Make sure you're on the *Hack the Stacks* wifi
 ]
 ```
 **Note**: All APIs support filtering via query params. Ex:
-**/api/vi/people?name=Abbott, Charles G.**
+**/api/v1/people?name=Abbott, Charles G.**
 
 ### /api/v1/people/:id
 ```json
