@@ -1,3 +1,6 @@
 npm-debug.log
 *.swp
 node_modules
+scrape/**/data/*
+scrape/venv
+.DS_Store
