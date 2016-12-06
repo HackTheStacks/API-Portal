@@ -1,21 +1,23 @@
-# Presentation
-
-https://docs.google.com/presentation/d/163vev-7-nU701YB1IRpbRkR4BonHA5CvfoCKCICpUQs/edit?usp=sharing
-
-
 # API Portal
+
+[You can find the presentation here.](https://docs.google.com/presentation/d/163vev-7-nU701YB1IRpbRkR4BonHA5CvfoCKCICpUQs/edit?usp=sharing)
 
 ## Connecting to the API
 
-You can connect to the API portal at the following *internal* url:
+You can connect to the API portal at the following url:
 
-    http://10.20.40.218:3000/<ROUTE>
+    http://10.20.40.218:3000/api/v1/<ROUTE>
 
-You must be on the *HackTheStacks* network to connect to the URL.
+You must be on the *internal* **HackTheStacks** network to connect to the URL.
 
 Substitute `<ROUTE>` with one of the routes listed below.
 
-### /api/v1/search?q=`<QUERY>`
+## Search APIs
+All search APIs support filtering via query params. Ex:
+**/search?q=Asiatic**
+
+### /search
+**Note**: The search endpoint results are largely unstructured.
 ```json
 [
   {
@@ -29,9 +31,8 @@ Substitute `<ROUTE>` with one of the routes listed below.
   }
 ]
 ```
-**Note**: The search endpoint results are largely unstructured.
 
-### /api/v1/image?q=`<QUERY>`
+### /image
 ```json
 [
   "http://lbry-web-007.amnh.org/digital/files/original/297702703c355792da5aee71b242bac8.jpg",
@@ -40,7 +41,11 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ]
 ```
 
-### /api/v1/people
+## REST APIs
+All APIs support filtering via query params. Ex:
+**/people?name=Abbott, Charles G.**
+
+### /people
 ```json
 [
   {
@@ -53,10 +58,8 @@ Substitute `<ROUTE>` with one of the routes listed below.
   }
 ]
 ```
-**Note**: All APIs support filtering via query params. Ex:
-**/api/v1/people?name=Abbott, Charles G.**
 
-### /api/v1/people/:id
+### /people/:id
 ```json
 {
   "id": "amnhp_1000001",
@@ -72,7 +75,7 @@ Substitute `<ROUTE>` with one of the routes listed below.
 }
 ```
 
-### /api/v1/expeditions
+### /expeditions
 ```json
 [
   {
@@ -86,7 +89,7 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ]
 ```
 
-### /api/v1/expeditions/:id
+### /expeditions/:id
 ```json
 {
   "id": "amnhc_2000001",
@@ -97,7 +100,7 @@ Substitute `<ROUTE>` with one of the routes listed below.
 }
 ```
 
-### /api/v1/departments
+### /departments
 ```json
 [
   {
@@ -111,10 +114,10 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ]
 ```
 
-### /api/v1/departments/:id
+### /departments/:id
 #### Under Construction
 
-### /api/v1/exhibitions
+### /exhibitions
 ```json
 [
   {
@@ -130,7 +133,9 @@ Substitute `<ROUTE>` with one of the routes listed below.
 ]
 ```
 
-### /api/v1/exhibitions/:id
+### /exhibitions/:id
+**NOTE** - Only permanent exhibitions have an available detailed view
+
 ```json
 {
   "id": "amnhc_4000078",
@@ -167,7 +172,6 @@ Substitute `<ROUTE>` with one of the routes listed below.
   ]
 }
 ```
-**NOTE** - Only permanent exhibitions have an available detailed view
 
 ## xEac
 
@@ -177,16 +181,4 @@ Substitute `<ROUTE>` with one of the routes listed below.
 - hall: amnhc_4
 
 ## Contributing
-To start the server:
-
-> **npm start**
-
-*OR*
-
-> **npm install -g pm2**
-
-> **pm2 start npm --name "HackathonAPI" -- start --watch**
-
-Make a GET request to any of the end points.
-[Postman](https://www.getpostman.com/) works well for testing.
-
+Refer to the [contributing](CONTRIBUTING.md) docs.
